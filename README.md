@@ -2,9 +2,13 @@ OVERVIEW
 
 Welcome to the "Now I Know JavaScript" repository! This collection represents my journey through learning JavaScript over the past few months. It contains a variety of practice files where I've experimented with different JavaScript concepts. Each file includes extensive comments to explain the code and thought process behind it.
 
+
+
 Content
 
 This repository includes two main sections: Basic and Advanced.
+
+
 
 Basics
 
@@ -33,6 +37,7 @@ Special types of loops specific to JavaScript, such as for...in and for...of etc
 
 Regular Expression:
 Some basic discussion of Regex.
+
 
 
 Advanced
