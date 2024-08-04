@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body style="background-color: black; color: white;">
+    
+    <p style="font-size: 1.5rem;">xml http request <br>
+    AJAX : Asynchronous JavaScript and XML</p>
+    <p class="status-types">State for everything</p>
+    <ul class="status-types">
+        <li>"0" : UNSENT -> Client has been created. open() not called yet. </li>
+        <li>"1" : OPENED -> open() has been called.</li>
+        <li>"2" : HEADERS_RECIEVED -> send() has been called and headers and status are available.</li>
+        <li>"3" : LOADING -> Downloading; responseText holds partial data.</li>
+        <li>"4" : DONE -> The opertaion is complete.</li>
+    </ul>
+
+
+</body>
+
+<style>
+    .status-types{
+        font-size: 1.1rem;
+    }
+</style>
+
+<script>
+    const requestURL = 'https://api.github.com/users/fahadxhussain'
+    const xhr = new XMLHttpRequest();
+    console.log(xhr.readyState) // 0
+    xhr.open('GET', requestURL) // Not called with this request
+    console.log(xhr.readyState) // 1
+
+    xhr.onreadystatechange = function(){ // called everytime state is changed
+        console.log(xhr.readyState)
+
+        if(xhr.readyState === 4){
+            console.log(this.responseText)
+            const data = this.responseText // Response is usually recieved as String
+            console.log(data.followers) // Wil give undefined because data is not recieved as Object
+
+            // Converting into Object
+            const dataObject = JSON.parse(data) // Changed into JSON Object
+            console.log(typeof(dataObject))
+
+            console.log(dataObject.login)
+            console.log(dataObject.followers)
+            console.log(dataObject.following_url) // I think this can give the instantenous follow button 
+
+        }
+    }
+    // console.log(xhr.readyState)
+    xhr.send() // open called with this method
+    
+</script>
+</html>

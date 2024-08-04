@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asynchronous Programming</title>
+</head>
+<body>
+    
+    <h1>Chai Aur Asynchronous Code</h1>
+    <button id="start">START</button>
+    <button id="stop">STOP</button>
+    
+</body>
+
+<script>
+
+
+    /*
+
+    const sayDate = function(){
+        console.log('I am Interval', Date.now())
+    }
+
+    const intervalOne = setInterval(sayDate, 5000)
+
+    const saySomething = function(str){
+        console.log(str)
+    }
+    const intervalTwo = setInterval(saySomething, 4000, "Something") // Third argument is passed on as parameter to the function called -> str
+    // clearInterval(intervalOne)
+    // clearInterval(intervalTwo)
+
+    */
+    
+
+    // Generating Random Colors
+    const randomColor = function(){
+        const hex = '0123456789ABCDEFabcdef'
+        let color = '#'
+
+        for(let i=0; i<6; i++){
+            let randomNum = Math.floor(Math.random() * 22)
+            color += hex[randomNum]
+        }
+
+        return color;
+    };
+
+    let intervalId;
+
+    const startChangingColors = function(){
+        
+        // Better code, stops clicking the start button twice
+        // Without this condition, with each click an interval will be initiated which could not be stopped bacause the reference of previous intervals is lost.
+        if( !intervalId ){
+            intervalId = setInterval(changeColor, 1000)
+        }
+
+        function changeColor(){
+            document.body.style.backgroundColor = randomColor();
+        }
+    }
+
+    document.querySelector('#start').addEventListener('click', startChangingColors)
+
+    const stopChangingColors = function(){
+        clearInterval(intervalId)
+        intervalId = null
+        // location.reload() // Refreshes the Page
+    }
+
+
+    document.querySelector('#stop').addEventListener('click', stopChangingColors)
+
+</script>
+</html>
