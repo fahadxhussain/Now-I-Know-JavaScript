@@ -41,11 +41,15 @@ The Advanced folder delves into more complex and specialized JavaScript topics:
 
 DOM Manipulation:
 Techniques for interacting with the Document Object Model.
+
 Events:
 Handling user interactions and events.
+
 API Requests:
 Old and new ways of API requests.
+
 Asynchronous Programming:
 Understanding callbacks, promises, and async/await.
+
 Prototypes and Inheritance:
 Deep dive into prototypes and object-oriented programming in JavaScript.
