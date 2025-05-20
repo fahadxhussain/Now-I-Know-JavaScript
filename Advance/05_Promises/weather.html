@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Weather App</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(to right, #1f1c2c, #928dab);
+      color: white;
+      min-height: 100vh;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .weather-app {
+      background-color: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 2rem;
+      width: 100%;
+      max-width: 600px;
+      text-align: center;
+    }
+
+    .weather-app h1 {
+      font-size: 1.8rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .dropdown-wrapper {
+      position: relative;
+      width: 100%;
+      max-width: 400px;
+      margin: auto;
+      margin-bottom: 1.2rem;
+    }
+
+    .input-box {
+      width: 100%;
+      padding: 0.8rem 2.5rem 0.8rem 1rem;
+      border-radius: 8px;
+      border: none;
+      font-size: 1rem;
+      background-color: rgba(255, 255, 255, 0.15);
+      color: white;
+    }
+
+    .input-box::placeholder {
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .dropdown-icon {
+      position: absolute;
+      top: 50%;
+      right: 1rem;
+      transform: translateY(-50%);
+      color: white;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    .dropdown-list {
+      max-height: 200px;
+      overflow-y: auto;
+      position: absolute;
+      width: 100%;
+      background-color: #fff;
+      color: #000;
+      z-index: 1000;
+      border-radius: 0 0 10px 10px;
+      display: none;
+      border: 1px solid #ccc;
+    }
+
+    .dropdown-list div {
+      padding: 0.6rem 1rem;
+      cursor: pointer;
+    }
+
+    .dropdown-list div:hover {
+      background-color: #f0f0f0;
+    }
+
+    button {
+      background-color: #00c6ff;
+      color: white;
+      padding: 0.7rem 1.5rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #0072ff;
+    }
+
+    .weather-card {
+      background-color: rgba(0, 0, 0, 0.4);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-top: 1rem;
+      text-align: left;
+    }
+
+    .weather-card h2 {
+      font-size: 1.4rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .weather-card p {
+      font-size: 1rem;
+      margin: 0.3rem 0;
+    }
+
+    .icon {
+      font-size: 1.2rem;
+      margin-right: 0.5rem;
+      color: #ffd700;
+    }
+  </style>
+</head>
+<body>
+  <div class="weather-app">
+    <h1><i class="fas fa-cloud-sun"></i> Weather Forecast</h1>
+    <div class="dropdown-wrapper">
+      <input type="text" id="cityInput" class="input-box" placeholder="Select a city" oninput="filterDropdown()">
+      <i class="fas fa-chevron-down dropdown-icon" onclick="toggleDropdown()"></i>
+      <div class="dropdown-list" id="dropdownList"></div>
+    </div>
+    <button onclick="getWeather()">Get Weather</button>
+    <div id="weatherOutput"></div>
+  </div>
+
+  <script>
+    const cities = [
+      "New York, USA", "Los Angeles, USA", "London, UK", "Paris, France", "Berlin, Germany",
+      "Tokyo, Japan", "Seoul, South Korea", "Beijing, China", "Shanghai, China", "Moscow, Russia",
+      "Toronto, Canada", "Vancouver, Canada", "Sydney, Australia", "Melbourne, Australia", "Dubai, UAE",
+      "Mumbai, India", "Delhi, India", "Karachi, Pakistan", "Lahore, Pakistan", "Islamabad, Pakistan",
+      "Dhaka, Bangladesh", "Kolkata, India", "Bangkok, Thailand", "Singapore, Singapore", "Jakarta, Indonesia",
+      "Kuala Lumpur, Malaysia", "Hanoi, Vietnam", "Manila, Philippines", "Tehran, Iran", "Riyadh, Saudi Arabia",
+      "Cairo, Egypt", "Cape Town, South Africa", "Johannesburg, South Africa", "Lagos, Nigeria", "Nairobi, Kenya",
+      "Istanbul, Turkey", "Rome, Italy", "Madrid, Spain", "Lisbon, Portugal", "Amsterdam, Netherlands",
+      "Brussels, Belgium", "Athens, Greece", "Vienna, Austria", "Zurich, Switzerland", "Stockholm, Sweden",
+      "Oslo, Norway", "Copenhagen, Denmark", "Helsinki, Finland", "Budapest, Hungary", "Prague, Czech Republic",
+      "Warsaw, Poland", "Dublin, Ireland", "Mexico City, Mexico", "Lima, Peru", "Bogotá, Colombia",
+      "Buenos Aires, Argentina", "Santiago, Chile", "São Paulo, Brazil", "Rio de Janeiro, Brazil", "Caracas, Venezuela",
+      "San Francisco, USA", "Chicago, USA", "Boston, USA", "Miami, USA", "Seattle, USA",
+      "Houston, USA", "Philadelphia, USA", "Atlanta, USA", "Dallas, USA", "Phoenix, USA",
+      "San Diego, USA", "Minneapolis, USA", "Denver, USA", "Detroit, USA", "Charlotte, USA",
+      "Montreal, Canada", "Ottawa, Canada", "Calgary, Canada", "Edmonton, Canada", "Winnipeg, Canada",
+      "Brisbane, Australia", "Perth, Australia", "Adelaide, Australia", "Canberra, Australia", "Hobart, Australia",
+      "Auckland, New Zealand", "Wellington, New Zealand", "Christchurch, New Zealand", "Doha, Qatar", "Kuwait City, Kuwait",
+      "Amman, Jordan", "Beirut, Lebanon", "Jerusalem, Israel", "Baghdad, Iraq", "Damascus, Syria",
+      "Tbilisi, Georgia", "Yerevan, Armenia", "Baku, Azerbaijan", "Almaty, Kazakhstan", "Tashkent, Uzbekistan",
+      "Peshawar, Pakistan", "Swabi, Pakistan", "Mardan, Pakistan", "Faisalabad, Pakistan", "Multan, Pakistan",
+      "Hyderabad, Pakistan", "Quetta, Pakistan", "Gilgit, Pakistan", "Skardu, Pakistan", "Rawalpindi, Pakistan"
+    ];
+
+    const cityInput = document.getElementById("cityInput");
+    const dropdownList = document.getElementById("dropdownList");
+
+    function populateDropdown(filteredCities = cities) {
+      dropdownList.innerHTML = "";
+      filteredCities.forEach(city => {
+        const item = document.createElement("div");
+        item.textContent = city;
+        item.onclick = () => {
+          cityInput.value = city;
+          dropdownList.style.display = "none";
+        };
+        dropdownList.appendChild(item);
+      });
+    }
+
+    function toggleDropdown() {
+      if (dropdownList.style.display === "block") {
+        dropdownList.style.display = "none";
+      } else {
+        populateDropdown();
+        dropdownList.style.display = "block";
+      }
+    }
+
+    function filterDropdown() {
+      const value = cityInput.value.toLowerCase();
+      const filtered = cities.filter(city => city.toLowerCase().includes(value));
+      populateDropdown(filtered);
+      dropdownList.style.display = "block";
+    }
+
+    document.addEventListener("click", (e) => {
+      if (!e.target.closest(".dropdown-wrapper")) {
+        dropdownList.style.display = "none";
+      }
+    });
+
+    function getWeather() {
+      const city = cityInput.value.trim();
+      const output = document.getElementById("weatherOutput");
+
+      if (!city) {
+        output.innerHTML = "<p>Please select a city first.</p>";
+        return;
+      }
+
+      const url = `https://wttr.in/${city}?format=j1`;
+
+      fetch(url)
+        .then(res => res.json())
+        .then(data => {
+          const current = data.current_condition[0];
+          output.innerHTML = `
+            <div class="weather-card">
+              <h2><i class="fas fa-location-dot icon"></i>${city}</h2>
+              <p><i class="fas fa-temperature-half icon"></i> Temperature: ${current.temp_C}°C</p>
+              <p><i class="fas fa-smog icon"></i> Condition: ${current.weatherDesc[0].value}</p>
+              <p><i class="fas fa-wind icon"></i> Wind: ${current.windspeedKmph} km/h</p>
+              <p><i class="fas fa-droplet icon"></i> Humidity: ${current.humidity}%</p>
+              <p><i class="fas fa-clock icon"></i> Time: ${current.observation_time} UTC</p>
+            </div>
+          `;
+        })
+        .catch(() => {
+          output.innerHTML = "<p style='color:red;'>Failed to fetch weather data.</p>";
+        });
+    }
+  </script>
+</body>
+</html>

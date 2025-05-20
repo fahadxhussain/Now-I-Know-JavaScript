@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1 style="text-align: center;">Click Anywhere</h1>
+    <style>
+        .circle{
+            position: absolute;
+            border-radius: 50%;
+            background-color: blue;
+            width: 50px;
+            height: 50px;
+        }
+    </style>
+
+    <script>
+        const randomColor = function(){
+        const hex = '0123456789ABCDEFabcdef'
+        let color = '#'
+
+        for(let i=0; i<6; i++){
+            let randomNum = Math.floor(Math.random() * 22)
+            color += hex[randomNum]
+        }
+
+        return color;
+    };
+
+
+        document.addEventListener('click', function(e){
+            const x = e.clientX
+            const y = e.clientY
+
+            console.log(x, y)
+
+            const circle = document.createElement('div')
+            circle.style.backgroundColor = randomColor();
+            circle.setAttribute('class','circle')
+
+            circle.style.left = `${x-20}px`;
+            circle.style.top = `${y-16}px`;
+
+            document.body.appendChild(circle)
+        })
+    </script>
+</body>
+</html>

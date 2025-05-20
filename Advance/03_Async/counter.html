@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Counter</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
+</head>
+<body>
+    
+    
+
+    <div class="main-container">
+
+        <div class="second-container">
+
+            <div class="stopwatch">
+                <div class="header">
+                    StopWatch
+                </div>
+                <div class="count-div">
+                    <h1 class="main seconds">00</h1>
+                    <h2 class="millisec">00</h2>
+                </div>
+    
+                <div class="buttons">
+                    <button class="btn stop-btn">Stop</button>
+                    <button class="btn reset" id="stopwatch-reset">Reset</button>
+                    <button class="btn start-btn">Start</button>
+                </div>
+            </div>
+
+            <div class="counter">
+                <div class="header">
+                    Counter
+                </div>
+                <div class="count-div">
+                    <h1 class="main count">00</h1>
+                </div>
+
+                <div class="buttons">
+                    <button class="btn increase-btn">Increase</button>
+                    <button class="btn reset" id="counter-reset">Reset</button>
+                    <button class="btn decrease-btn">Decrease</button>
+                </div>
+            </div>
+            
+
+            
+        </div>
+        
+        
+        <button id="toggleBtn">Toggle</button>
+        
+    </div>
+
+
+</body>
+<style>
+    * {
+    margin: 0;
+    padding: 0;
+    font-family: 'Ubuntu';
+}
+.main-container {
+    background-color: darkgray;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.second-container {
+    position: relative;
+    background-color: white;
+    height: 600px;
+    width: 600px;
+    overflow: hidden;
+    border-radius: 18px;
+    box-shadow: 7px 7px 8px -4px rgba(0,0,0,0.71);;
+}
+.stopwatch, .counter {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    transition: transform 1s ease;
+}
+.stopwatch {
+    background-color: white;
+    transform: translateX(0);
+}
+.counter {
+    background-color: white;
+    transform: translateX(100%);
+}
+.show-counter .stopwatch {
+    transform: translateX(-100%);
+}
+.show-counter .counter {
+    transform: translateX(0);
+}
+
+.count-div{
+        display: flex;
+        align-items: baseline;
+}
+.header{
+    font-size: 2.2rem;
+    font-weight: 700;
+    padding: 12px 28px;
+    margin: 60px 10px;
+    border: 4px solid black;
+    border-radius: 8px;
+}
+
+.main{
+    font-size: 4rem;
+    padding: 5px;
+    padding-right: 10px;
+}
+.millisec{
+    font-size: 2rem;
+    padding-right: 12px;
+}
+.btn{
+    background-color: white;
+    border: 3px solid black;
+    border-radius: 8px;
+    font-size: 1.8rem;
+    padding: 5px 10px;
+    margin: 18px 2px;
+}
+
+
+#toggleBtn{
+    position: absolute;
+    top: 72vh;
+    background-color: white;
+    padding: 8px;
+    border-radius: 4px;
+    
+}
+</style>
+
+<script>
+
+    const count = document.querySelector('.count')
+    const increaseBtn = document.querySelector('.increase-btn')
+    const decreaseBtn = document.querySelector('.decrease-btn')
+    const counterReset = document.getElementById('counter-reset')
+
+
+    const seconds = document.querySelector('.seconds')
+    const milliSec = document.querySelector('.millisec')
+    const stopBtn = document.querySelector('.stop-btn')
+    const startBtn = document.querySelector('.start-btn')
+    const stopwatchReset = document.getElementById('stopwatch-reset')
+
+   
+
+    increaseBtn.addEventListener('click', function(){
+        let num = count.textContent
+        num = Number(num)
+        if(num<10){
+            count.textContent = (num + 1).toString().padStart(2, '0');
+        } else{
+        count.textContent = num + 1
+        }
+    })
+
+    decreaseBtn.addEventListener('click', function(){
+        let num = count.textContent
+        num = Number(num)
+        
+        if(num>0){
+            if(num<10){
+            count.textContent = (num - 1).toString().padStart(2, '0');
+            } else{
+            count.textContent = num - 1
+        }
+        }
+    })
+
+    counterReset.addEventListener('click', ()=>{
+        count.textContent = '00'
+    })
+
+    let intervalId;
+    startBtn.addEventListener('click', function() {
+    if (!intervalId) {
+        intervalId = setInterval(function() {
+            let num = milliSec.textContent;
+            num = Number(num);
+            num = num + 1;
+            
+            if (num > 99) {
+                num = 0;
+                let num2 = seconds.textContent;
+                num2 = Number(num2)
+                num2 = num2 + 1
+                if (num2 < 10) {
+                seconds.textContent = num2.toString().padStart(2, '0');
+                } else {
+                seconds.textContent = num2;
+                }
+            }
+            
+            if (num < 10) {
+                milliSec.textContent = num.toString().padStart(2, '0');
+            } else {
+                milliSec.textContent = num;
+            }
+        }, 10);
+    }
+});
+
+
+    stopBtn.addEventListener('click', function(){
+        clearInterval(intervalId)
+        intervalId = null
+    })
+
+    stopwatchReset.addEventListener('click', function(){
+        seconds.textContent = '00'
+        milliSec.textContent = '00'
+    })
+
+    document.getElementById('toggleBtn').addEventListener('click', function() {
+    document.querySelector('.second-container').classList.toggle('show-counter');
+});
+
+</script>
+
+
+</html>

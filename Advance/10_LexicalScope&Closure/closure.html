@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Closure</title>
+</head>
+<body>
+    <button id="orange">Orange</button>
+    <button id="green">Green</button>
+</body>
+
+<script>
+    // Lexical Scope
+    function init(){
+        let name = "Mozilla"
+        function displayName(){
+            console.log(name)
+        }
+
+        displayName()
+    }
+
+    init()
+
+
+    // Closure
+    // A Closure is a feature in JavaScript where an inner function has access to the outer (enclosing) function's variables, even after the outer function has finished executing. This is possible because the inner function "closes over" the variables of the outer function, preserving them in memory.
+
+    // OverAll the Lexical Scope is returned not just the function
+    function makeFunc(){
+        const name = "Mozilla"
+        function displayName(){
+            console.log(name)
+        }
+        return displayName // makeFunc returns displayName function to myFunction variable below - But only the function is not returned, the function along with its lexical scope is returned
+    }
+
+    const myFunction = makeFunc();
+    // myFunction()
+
+</script>
+    
+
+
+<script>
+    // document.getElementById('orange').onclick = function(){
+    //     document.body.style.backgroundColor = 'orange'
+    // }
+
+    // document.getElementById('green').onclick = function(){
+    //     document.body.style.backgroundColor = 'green'
+    // }
+    // BUT WHAT IF BUTTONS ARE 20????????
+    // DRY: Dont repeat yourself
+
+    /*
+    // THIS CODE WONT WORK AS THE FUNCtION IS DIRECtlY EXECUTED
+    function clickHandler(color){
+        document.body.style.backgroundColor = `${color}`
+    }
+
+
+    document.getElementById('orange').onclick = clickHandler('orange')
+    */
+
+
+    function clickHandler(color){
+        
+        return function(){
+            document.body.style.backgroundColor = `${color}`
+        }
+        // When the clickHandler function is called from onclick event it returns the inner function, but the inner function has access to the color variable of the outer function -> Lexical Scope 
+        // The inner function returns the whole Lexical Scope and not just itself -> Closure
+    }
+
+    document.getElementById('orange').onclick = clickHandler('orange')
+    document.getElementById('green').onclick = clickHandler('green')
+</script>
+</html>

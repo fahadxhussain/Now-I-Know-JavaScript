@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asynchronous Programming</title>
+</head>
+<body>
+    
+    <h1>Chai Aur Code</h1>
+    <button id="stop">STOP</button>
+    
+</body>
+
+<script>
+
+    // Synchronous code runs almost fine, but whenever it sets out on reading a file .. Bhoom 
+    // Because it cant read files on itself, it requests the KERNEL to read files and KERNEL be like: Ruko zara, sabar karo
+
+    // One of the examples of setTimeOut are the pop-ups on different websites
+    // This callback is usually called Handler
+    setTimeout(function(){
+        console.log('TimeOut: 3 Seconds')
+    }, 3000)
+
+    // setInterval(function(){
+    //     console.log('Interval')
+    // },2000)
+
+    const changeHeading = function(){
+    document.querySelector('h1').innerHTML = 'Best JS Series'
+    }
+
+    const changeMe = setTimeout(changeHeading, 3000)
+
+    // CLEAR TIMEOUT
+
+    // clearTimeout(changeMe)
+    document.querySelector('#stop').addEventListener('click', function(){
+        clearTimeout(changeMe)
+        console.log('STOPPED')
+    })
+
+
+    // ##############################
+    console.log('1')
+
+    setTimeout(()=> {
+        console.log('2')
+    }, 0) // Because it comes to the callStack through the taskQueue - it waits until the main call stake is clear
+    // setTimeout(...) → scheduled, not run now → callback goes to the Web API, then to the task queue
+
+    console.log('3')
+
+</script>
+</html>

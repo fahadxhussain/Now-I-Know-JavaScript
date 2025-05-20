@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOM Learning</title>
+    <style>
+        body{
+            background-color: black;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="bg-black">
+        <h1 id="titleID" class="heading">Learning Document Object Model <span style="display: none;">Test Text</span> BLA BLA</h1>
+
+        <h2>Lorem ipsum dolor sit.</h2>
+        <h2>Lorem ipsum dolor sit amet consectetur.</h2>
+        <h2>Lorem ipsum dolor sit amet.</h2>
+
+        <input type="password" name="pass-block" id="pass">
+
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+
+        <ul class="listlist">
+            <li>Item one</li>
+            <li>Item two</li>
+            <li>Item three</li>
+        </ul>
+        
+        <ul class="listlist">
+            <li class="list-item" >One</li>
+            <li class="list-item" >Two</li>
+            <li class="list-item" >Three</li>
+            <li class="list-item" >Four</li>
+        </ul>
+    </div>
+
+</body>
+
+<script>
+    console.log(document.links) // all the links in the document
+    const title =  document.getElementById('titleID')
+    console.log(title)
+    console.log(title.id)
+    console.log(title.class) // Will give undefined
+    console.log(title.className) // We have to use 'className' in document although it is 'class' in HTML
+
+    console.log(title.getAttribute('class')) // using 'className' here will return 'null' value
+    title.setAttribute('class', 'noHeading') // Will always over-write
+    console.log(title.getAttribute('class')) 
+
+    console.log(title.getAttributeNames()) // Returns an array of all attributes of the element
+
+    // Adding CSS Styles through JavaScript
+    title.style.backgroundColor = 'grey' // Don't forget the quotation marks
+    title.style.padding = '20px'
+    title.style.borderRadius = '40px'
+    title.style.textAlign = 'center'
+    title.style.color = 'aqua'; 
+
+    // Extracting Content
+
+    // See the difference in them all 
+    console.log('innerHTML :')
+    console.log(title.innerHTML)
+     
+    console.log('textContent :')
+    console.log(title.textContent)
+
+    console.log('innerText :')
+    console.log(title.innerText)
+
+    console.log('Outer HTML: ')
+    console.log(title.outerHTML)
+    // Getting Element by Class name returns an HTML collection of the elements having that class name
+    // HTML collection does not have array methods not even 'forEach' while nodeList have 'forEach' method
+    const htmlCollection = document.getElementsByClassName('noHeading')
+    console.log(htmlCollection)
+
+    // Query Selector
+    console.log(document.querySelector('h2')) // the first h2 in the document
+    console.log(document.querySelector('#titleID')) // by ID
+    console.log(document.querySelector('.noHeading')) // by Class
+
+    console.log(document.querySelector('input[type = "password"]'))
+
+    // Manipulation with Query Selector
+    const ul = document.querySelector('ul')
+    console.log(ul)
+    ul.querySelector('li').style.color = 'red'
+
+    // Query Selector All
+    // Returns a nodeList, Not HTML Collection, Not an Array but have some arrayLike properties
+    // The difference between HTML Collection and Nodelist is 
+    // 1. NodeList is iterable with for Each while HTML Collection is not
+    // 2. HTML Collection includes only Elements from the page while NodeList may contain many things for example comments, text Nodes
+    // No maps or loops etc -> only forEach
+    const nodeList = document.querySelectorAll('li')
+    console.log('\n\n Node List \n\n', nodeList)
+
+    // Two ways to access items of nodeList
+    nodeList.item(1).style.color = 'orange'
+    nodeList[2].style.color = 'aqua'
+
+    // lets try forEach loop
+    nodeList.forEach((li) => {
+        li.style.backgroundColor = 'grey'
+    })
+
+    const secondList = document.querySelectorAll('ul').item(1).querySelectorAll('li')
+
+    secondList.item(2).style.backgroundColor = 'red'
+
+    // HTML Collection -> No forEach loop, Thus we convert it into Array first
+    const htmlColl = document.getElementsByClassName('list-item')
+    const myArr = Array.from(htmlColl) // Converted into array
+    console.log(`Array.from:  ${myArr}`)
+    console.log(myArr)
+
+
+    myArr.forEach((li) => {
+        li.style.fontSize = '40px'
+        li.style.color = 'aqua'
+    })
+</script>
+</html>

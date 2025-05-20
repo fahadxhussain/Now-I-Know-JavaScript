@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Color Flipper</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav>
+        <div class="nav-center">
+            <h4>Color Flipper</h4>
+        </div>
+        <div class="right">Reset</div>
+    </nav>
+
+    <main>
+        <div class="container">
+            <h2>Background Color: <span class="color">#f1f5f8</span></h2>
+            <button class="btn btn-hero" id="btn">
+                Change Color
+            </button>
+        </div>
+    </main>
+</body>
+
+<style>
+    *{
+        margin: 0;
+        padding: 0;
+        font-family: 'Be Vietnam Pro';
+    }
+
+    nav{
+        width: 100vw;
+        height: 10vh;
+        background-color: gray;
+        color: white;
+        font-size: 32px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .nav-center{
+        padding: 25px 60px;
+    }
+
+    .right{
+        padding: 10px 40px; 
+        text-decoration-style: none;
+        background-color: darkgray;
+        border-radius: 10px;
+
+    }
+    a{
+        text-decoration: none;
+        color: white;
+        font-weight: 700;
+    }
+
+    .container{
+        width: 100vw;
+        height: 90vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+    }
+
+    h2{
+        padding: 30px;
+        background-color: gray;
+        border-radius: 12px;
+        color: white;
+        font-size: 32px;
+        font-weight: 700;
+
+    }
+
+    .btn{
+        
+        background-color: pink;
+        border: none;
+        border-radius: 10px;
+        margin: 20px;
+        color: white;
+        background-color: gray;
+        padding: 25px 50px;
+        font-size: 22px;
+        font-weight: 700;
+    }
+
+    .btn:hover{
+        opacity: .8;
+        transform: scale(1.05);
+    }
+
+
+
+
+</style>
+
+<script>
+    
+const btn = document.getElementById('btn')
+btn.addEventListener('click', function(){
+
+    let ranColor = '#'
+    const hexCode = '0123456789ABCDEF'
+    
+
+    for(let i=0; i<6; i++){
+        let randomNum = Math.floor(Math.random() * 16)
+        const randomIndex = hexCode[randomNum]
+        ranColor = ranColor + randomIndex
+    }
+    document.querySelector('.color').textContent = ranColor
+    document.querySelector('.color').style.color = ranColor
+    document.body.style.backgroundColor = ranColor;
+
+
+})
+
+document.querySelector('.right').addEventListener('click', function(){
+    location.reload()
+})
+
+
+</script>
+</html>

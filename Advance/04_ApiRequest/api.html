@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body style="background-color: black; color: aqua;">
+    <h1>hehe</h1>
+    <button onclick="window.open('https://chatgpt.com/share/68285eb1-5d44-8004-b0a5-abcceda0d129', '_blank')">For more on XMLHttp Request</button>
+
+</body>
+
+<script>
+    const url = 'https://api.github.com/users/fahadxhussain' // JSON Formatter
+    const xhr = new XMLHttpRequest() // Just XHR object is created - State 0
+    console.log(xhr.readyState)
+
+    xhr.open('GET', url) // Request is prepared / congfigured - State 1 - not set yet, You can still: Set headers (xhr.setRequestHeader) or Attach event listeners . for more https://chatgpt.com/share/68285eb1-5d44-8004-b0a5-abcceda0d129
+    console.log(xhr.readyState)
+
+    xhr.onreadystatechange = function(){
+        console.log(xhr.readyState)
+
+        // updating DOM - check in 2g
+        // if(xhr.readyState == 2){
+        //     const text = document.createElement('h2')
+        //     text.innerText = 'State became 2'
+        //     document.body.appendChild(text)
+        // }
+
+        // if(xhr.readyState == 2){
+        //     const text2 = document.createElement('h2')
+        //     text2.innerText = 'State bacame 3'
+        //     document.body.appendChild(text2)
+        // }
+
+        if(xhr.readyState == 4){
+            console.log(this.responseText)
+            let data = this.responseText
+
+            data = JSON.parse(data)
+            console.log(data.login)
+            console.log(data.followers)
+            console.log(`Status: ${this.status}`)
+
+            // const username = data.login
+            // const name = document.createElement('h2')
+            // name.innerText = `Username is : ${username}`
+            // document.body.appendChild(name)
+        }
+    }
+
+    xhr.send() // If we want to add, update data we pass that object/data 'send(HERE)'
+    //Actually sends the request. State 2: The server responded with headers (but not the body yet). State 2
+    // State 3: LOADING: You are receiving the response data from the server. The browser is downloading it chunk by chunk.
+    // State 4: DONE: Full response recieved. Now, you can use:
+
+    // xhr.responseText – for string
+
+    //xhr.response – parsed data (if set properly)
+
+    //xhr.status – HTTP status code like 200, 404, etc.
+</script>
+</html>

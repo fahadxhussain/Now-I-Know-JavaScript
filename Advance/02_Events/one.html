@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body style="background-color: #414141; color: white;">
+
+    <h2>Amazing Images</h2>
+    <input type="text" class="search">
+    <div>
+
+        <ul id="images">
+
+            <li><img width="200px" id="bike" src="https://images.pexels.com/photos/1119796/pexels-photo-1119796.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt=""></li>
+            <li><img width="200px" id="sky" src="https://images.pexels.com/photos/2531709/pexels-photo-2531709.jpeg?auto=compress&cs=tinysrgb&w=800" alt=""></li>
+            <li><img width="200px" id="river" src="https://images.pexels.com/photos/1144176/pexels-photo-1144176.jpeg?auto=compress&cs=tinysrgb&w=800" alt=""></li>
+            <li><img width="200px" id="owl" src="https://images.pexels.com/photos/86596/owl-bird-eyes-eagle-owl-86596.jpeg?auto=compress&cs=tinysrgb&w=800" alt=""></li>
+            <li><img width="200px" id="white-house" src="https://images.pexels.com/photos/129112/pexels-photo-129112.jpeg?auto=compress&cs=tinysrgb&w=800" alt=""></li>
+            <li><img width="200px" id="japan" src="https://images.pexels.com/photos/2187605/pexels-photo-2187605.jpeg?auto=compress&cs=tinysrgb&w=800" alt=""></li>
+            <li><a id="google" style="color: aqua;" href="https://google.com">Google</a></li>
+
+        </ul>
+    </div>    
+</body>
+
+<script>
+    // Usually JS is a sequentially run Language. We can alter it in asynchronous programming and sometimes in events.
+
+    // We should use Event Listner instead of onClick because the former gives more features. Expecially the propagation
+
+    /*
+    document.getElementById('owl').onclick = function(){
+        alert('Owl Incoming')
+    }
+    */
+
+    /*
+    Event Listener is Powerful
+    document.getElementById('owl').addEventListener('click', function(){
+        alert('Owl Incominggg!!')
+    }, false)
+    */
+
+    // Some old methods
+    // 1. attachEvent()
+    // 2. jQuery - on -> (Event Listener) ".on"
+
+    // BROWSER EVENTS and ENVIRONMENT EVENTS
+
+    // QUESTION: Create a div so that a circle is formed where mouse is clicked inside the div
+    // SOL: Easy ..Add an eventListener to Capture the x and y position and form a circle on that position
+
+
+    // EVENT PROPAGATION - When child and parent both have events
+    // 1. Event bubbling and 2. Event Capturing
+
+    /* 1. When capturing from small element to larger or you can say from child elements to
+    parent elements -> Event Bubbling (When both are false -> default)
+
+       2. If we make the 'false' as 'true' then it is called Event Capturing -> from parent to child
+
+       Note: When both are false, the child will be acted upon first and then the parent. When parent is true it is captured first.
+
+       Event Capturing (Trickling)
+            The event travels from the document → root → parent → target element.
+            Handlers run top-down, only if registered with useCapture = true.
+
+        Event Bubbling
+            The event travels from the target → parent → root → document.
+            Handlers run bottom-up, by default (useCapture = false or omitted).
+
+
+            We can the propagation of events by simply writing e.stopPropagation() -> The event will run on the current item but will not go any further - no bubbling, no capturing
+    */ 
+
+
+    /*
+
+
+    document.getElementById('images').addEventListener('click', function(eventObject){
+        console.log(eventObject)
+        console.log(eventObject.timeStamp)
+        console.log('Clicked inside the UL')
+        // if I make the following false as true and then add a stop propagation method to the
+        // eventObject, it will not propagate further ( to the child elements) -> I think the child element will never be clickable again
+    }, false)
+
+    document.getElementById('owl').addEventListener('click', function(eventObject){
+        console.log('Owl Clicked')
+        
+        // What if I want to stop propagating to parent element -> used to track both seperately
+        // Simple add stop propagating
+        eventObject.stopPropagation()
+
+    }, false)
+
+    // WHAT TO LEARN MORE:
+    // type, timeStamp, preventDefault
+    // target, toElement, srcElement, currentTarget
+    // clientX, clientY, screenX, screenY
+    // altkey, ctrlkey, shiftkey, keyCode
+
+    */
+    document.getElementById('google').addEventListener('click', (e)=>{
+        e.preventDefault()
+        console.log('Google Default Prevented')  
+    })
+
+    
+
+    // Remove the clicked element
+    // Yeah I selected the parent Node ('#images') of all the li because its easy to target
+    document.querySelector('#images').addEventListener('click', function(e){
+        console.log(`Clicked ${e.timeStamp/1000} Seconds after page Load`)
+        console.log(e.target) // Gets you the target that is clicked, in this case its the photo clicked upon
+        console.log(e.target.parentNode) // PerentNode of each image is an 'li'
+
+        // A strict check to remove only images and not anything else
+        console.log(e.target.tagName)
+        if(e.target.tagName === 'IMG')
+        {
+
+        let removeIt = e.target.parentNode // Parent node of the photo is 'li'
+        // removeIt.remove() // new Method
+        // Both will do the job
+        removeIt.parentNode.removeChild(removeIt) // old school. Moves to parent of 'li' -> 'ul', and then removes child of 'ul' -> 'li'
+        }
+
+    }, false)
+
+    const imageItems = document.querySelectorAll('#images li'); // nodeList which Only have the 'li'
+    document.querySelector('#images').childNodes // All 'li' the elements + the line breaks 
+
+    console.log(imageItems) // gets all the 'li' having a parent with id 'images'
+    console.log(imageItems[1].querySelector('img')) // further selects the first 'img' within the 'li'
+    const search = document.querySelector('.search');
+
+
+    search.addEventListener('input', () => {
+        const searchValue = search.value.toLowerCase();
+        for (let i = 0; i < imageItems.length; i++) {
+            let imageId = imageItems[i].querySelector('img')?.id.toLowerCase(); // Selects the 'img' tag inside each nodeList element, checks if it exists, gets its id and converts it into lowercase
+            if (imageId && !imageId.includes(searchValue.trim())) {
+                imageItems[i].style.display = 'none'; // Hide the element
+            } else {
+                imageItems[i].style.display = ''; // empty quotations -> Default - To make the elements visible agin
+            }
+        }
+
+        // imageItems.forEach((item) => {
+        //    let imgId =  item.querySelector('img')?.id.toLowerCase()
+        //    if(imgId && !imgId.includes(searchValue.trim())){
+        //     item.style.display = 'none'
+        //    } else {
+        //     item.style.display = ''
+        //    }
+        // })
+    });
+    
+
+</script>
+
+</html>
